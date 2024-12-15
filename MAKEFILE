@@ -1,0 +1,31 @@
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -g
+SDL2_FLAGS = `sdl2-config --cflags --libs`
+
+# Directory for object files and the executable
+OUT_DIR = output
+
+# Default target
+all: $(OUT_DIR)/main
+
+# Link the object files to create the final executable
+$(OUT_DIR)/main: $(OUT_DIR)/main.o $(OUT_DIR)/spritesheet.o
+	$(CC) $(CFLAGS) -o $@ $^ $(SDL2_FLAGS)
+
+# Compile the main object file
+$(OUT_DIR)/main.o: main.c main.h | $(OUT_DIR)
+	$(CC) $(CFLAGS) -c main.c -o $@ $(SDL2_FLAGS)
+
+# Compile the spritesheet object file
+$(OUT_DIR)/spritesheet.o: spritesheet.c spritesheet.h | $(OUT_DIR)
+	$(CC) $(CFLAGS) -c spritesheet.c -o $@ $(SDL2_FLAGS)
+
+# Create the output directory if it doesn't exist
+$(OUT_DIR):
+	mkdir -p $(OUT_DIR)
+
+# Clean up object files and the executable
+clean:
+	rm -rf $(OUT_DIR)
+
